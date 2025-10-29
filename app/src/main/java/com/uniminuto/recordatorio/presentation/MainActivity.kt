@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            EventViewModel.Factory(repository)
+            EventViewModel.Factory(repository) // ✅ Utilitza la Factory amb el repositori local
         )[EventViewModel::class.java]
     }
 

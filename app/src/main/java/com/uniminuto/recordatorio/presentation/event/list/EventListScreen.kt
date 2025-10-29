@@ -38,7 +38,7 @@ import com.uniminuto.recordatorio.util.DateUtils
 @Composable
 fun EventListScreen(
     viewModel: EventViewModel,
-    onNavigateToCreate: () -> Unit // Se usará al hacer clic en un Fab (opcional)
+    onNavigateToEdit: (Int) -> Unit
 ) {
     val state by viewModel.eventListState.collectAsState()
 
@@ -66,7 +66,7 @@ fun EventListScreen(
                     EventItem(
                         event = event,
                         onDelete = { viewModel.deleteEvent(event) },
-                        onEdit = { /* Lógica para edición */ }
+                        onEdit = { onNavigateToEdit(event.id) }
                     )
                 }
             }

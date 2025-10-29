@@ -4,11 +4,13 @@ package com.uniminuto.recordatorio.presentation.event.create
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -104,13 +106,31 @@ fun CreateEventScreen(
         Spacer(Modifier.height(16.dp))
 
         // Fecha y Hora (RF01)
-        StyledTextField(
-            value = DateUtils.formatDateTime(uiState.dateTime),
-            onValueChange = { /* No editable directamente */ },
-            label = "Fecha y Hora",
-            readOnly = true,
-            modifier = Modifier.clickable { showDatePicker = true } // ✅ Usa el Modifier.clickable
-        )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            // CAMPO DE FECHA
+            StyledTextField(
+                value = DateUtils.formatDate(uiState.dateTime), // Asume que tienes formatDate()
+                onValueChange = { /* No editable directamente */ },
+                label = "Fecha",
+                readOnly = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showDatePicker = true } // Lanza solo DatePicker
+            )
+            Spacer(Modifier.width(16.dp))
+
+            // CAMPO DE HORA
+            StyledTextField(
+                value = DateUtils.formatTime(uiState.dateTime), // Asume que tienes formatTime()
+                onValueChange = { /* No editable directamente */ },
+                label = "Hora",
+                readOnly = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showTimePicker = true } // Lanza solo TimePicker
+            )
+        }
+        Spacer(Modifier.height(16.dp))
 
         // ------------------ DIÁLOGO DE FECHA (Compose Material 3) ------------------
         if (showDatePicker) {
@@ -136,7 +156,6 @@ fun CreateEventScreen(
                                 viewModel.updateEventUiState(uiState.copy(dateTime = finalDateTime))
 
                                 showDatePicker = false
-                                showTimePicker = true // Pasa al selector de hora
                             }
                         }
                     ) { Text("OK", color = NeonGreen) }

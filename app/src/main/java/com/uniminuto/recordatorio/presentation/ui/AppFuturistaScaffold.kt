@@ -45,7 +45,6 @@ val navItems = listOf(
     NavItem(Screen.EventList.route, Icons.AutoMirrored.Filled.List, "Eventos"),
     NavItem(Screen.CreateEvent.route, Icons.Default.Add, "Crear"),
     NavItem(Screen.Calendar.route, Icons.Default.DateRange, "Calendario"),
-    NavItem(Screen.Settings.route, Icons.Default.Settings, "Config.")
 )
 
 @Composable

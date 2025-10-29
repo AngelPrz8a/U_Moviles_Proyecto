@@ -62,12 +62,35 @@ class EventViewModel(
      * Guarda un evento a partir del estado actual del formulario.
      */
     fun saveEvent() {
-        if (!eventUiState.value.isValid()) return
+        val currentUiState = eventUiState.value
 
+        // 1. Mapear el estado a una entidad Event
+        val event = Event(
+            id = currentUiState.id,
+            title = currentUiState.title,
+            description = currentUiState.description.ifBlank { null },
+            location = currentUiState.location.ifBlank { null },
+            dateTime = currentUiState.dateTime,
+            isReminderSet = currentUiState.isReminderSet,
+            reminderOffsetMinutes = currentUiState.reminderOffsetMinutes
+        )
+
+        // 2. Ejecutar la operación en la base de datos
         viewModelScope.launch {
-            val event = eventUiState.value.toEvent()
+            // ✅ CORRECCIÓN: Usar la función correcta de la interfaz.
             repository.saveEvent(event)
-            _eventUiState.update { EventUiState() } // Limpiar formulario
+
+            // 3. Limpiar el estado después de guardar/actualizar
+            _eventUiState.update {
+                EventUiState() // Asume que EventUiState() resetea a un estado vacío (ID=0)
+            }
+        }
+    }
+
+    fun deleteEvent(event: Event) {
+        viewModelScope.launch {
+            repository.deleteEvent(event)
+            // Aquí iría la lógica para CANCELAR la alarma (RF04)
         }
     }
 
@@ -88,6 +111,16 @@ class EventViewModel(
                     )
                 }
             }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    class Factory(private val repository: EventRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(EventViewModel::class.java)) {
+                return EventViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
