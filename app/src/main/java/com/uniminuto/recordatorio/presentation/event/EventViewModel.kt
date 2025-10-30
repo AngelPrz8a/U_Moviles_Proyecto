@@ -61,7 +61,7 @@ class EventViewModel(
     /**
      * Guarda un evento a partir del estado actual del formulario.
      */
-    fun saveEvent() {
+    fun saveEvent(onComplete: () -> Unit) { // <<--- CORRECTION: Remove parentheses from Unit
         val currentUiState = eventUiState.value
 
         // 1. Mapear el estado a una entidad Event
@@ -77,13 +77,8 @@ class EventViewModel(
 
         // 2. Ejecutar la operación en la base de datos
         viewModelScope.launch {
-            // ✅ CORRECCIÓN: Usar la función correcta de la interfaz.
             repository.saveEvent(event)
-
-            // 3. Limpiar el estado después de guardar/actualizar
-            _eventUiState.update {
-                EventUiState() // Asume que EventUiState() resetea a un estado vacío (ID=0)
-            }
+            onComplete()
         }
     }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500781823495",
+    "project_id": "recordatorio-2df1e",
+    "storage_bucket": "recordatorio-2df1e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500781823495:android:281c56fd26cbc0c9cf9ca2",
+        "android_client_info": {
+          "package_name": "com.uniminuto.recordatorio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2YcGQUgfExu02oXpyEbyIOLF3KgiYij0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

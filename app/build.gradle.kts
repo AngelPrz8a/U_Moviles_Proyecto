@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -11,7 +12,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.recordatorio"
+        applicationId = "com.uniminuto.recordatorio"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -74,6 +75,20 @@ dependencies {
         debugImplementation(libs.androidx.compose.ui.test.manifest)
 
         coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+        implementation("com.google.maps.android:maps-compose:4.3.0")
+
+        // Google Location Services (Fused Location Provider)
+        implementation("com.google.android.gms:play-services-location:21.0.1")
+
+        // Geocodificación (para convertir coordenadas a dirección legible)
+        implementation("com.google.android.gms:play-services-maps:18.2.0")
+        implementation("com.google.maps.android:android-maps-utils:3.0.0")
+
+        implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
+        implementation("com.google.firebase:firebase-analytics")
+
+        implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     } catch (e: Exception) {
         TODO("Not yet implemented")
     }

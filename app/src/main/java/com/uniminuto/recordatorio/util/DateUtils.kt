@@ -15,11 +15,7 @@ object DateUtils {
 
     fun formatDateTime(dateTime: LocalDateTime): String {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                dateTime.format(formatter)
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
+            dateTime.format(formatter)
         } catch (e: Exception) {
             "Fecha/Hora inválida"
         }
@@ -34,12 +30,9 @@ object DateUtils {
 
     fun formatDate(dateTime: LocalDateTime): String {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val dateOnlyFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale("es", "ES"))
-                dateTime.format(dateOnlyFormatter)
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
+            val dateOnlyFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale("es", "ES"))
+            dateTime.format(dateOnlyFormatter)
+
         } catch (e: Exception) {
             "Fecha inválida"
         }
@@ -50,12 +43,8 @@ object DateUtils {
      */
     fun formatTime(dateTime: LocalDateTime): String {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val timeOnlyFormatter = DateTimeFormatter.ofPattern("HH:mm")
-                dateTime.format(timeOnlyFormatter)
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
+            val timeOnlyFormatter = DateTimeFormatter.ofPattern("HH:mm")
+            dateTime.format(timeOnlyFormatter)
         } catch (e: Exception) {
             "Hora inválida"
         }

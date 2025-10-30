@@ -13,11 +13,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -56,13 +60,12 @@ import java.time.ZoneOffset
 @Composable
 fun CreateEventScreen(
     viewModel: EventViewModel,
-    onEventSaved: () -> Unit
+    onEventSaved: () -> Unit,
+    onNavigateToMap: () -> Unit
 ) {
     val uiState by viewModel.eventUiState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
-
-    // 🚨 SE ELIMINARON las inicializaciones de rememberDatePickerState y rememberTimePickerState de aquí.
 
     Column(
         modifier = Modifier
@@ -72,7 +75,7 @@ fun CreateEventScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            "NUEVO EVENTO",
+            if (uiState.id == 0) "NUEVO EVENTO" else "ACTUALIZAR EVENTO",
             color = NeonGreen,
             fontWeight = FontWeight.Bold,
             fontSize = MaterialTheme.typography.headlineMedium.fontSize,
@@ -98,10 +101,17 @@ fun CreateEventScreen(
         Spacer(Modifier.height(16.dp))
 
         StyledTextField(
-            modifier = Modifier,
             value = uiState.location,
-            onValueChange = { viewModel.updateEventUiState(uiState.copy(location = it)) },
-            label = "Ubicación"
+            onValueChange = { /* No hace nada, es de solo lectura */ },
+            label = "Ubicación",
+            readOnly = true,
+            modifier = Modifier.clickable { onNavigateToMap() }, // El clickable va en el Modifier
+            // ✅ Añadimos el ícono aquí
+            trailingIcon = {
+                IconButton(onClick = onNavigateToMap) {
+                    Icon(Icons.Default.LocationOn, contentDescription = "Seleccionar Ubicación")
+                }
+            }
         )
         Spacer(Modifier.height(16.dp))
 
@@ -205,8 +215,7 @@ fun CreateEventScreen(
 
         Button(
             onClick = {
-                viewModel.saveEvent()
-                onEventSaved()
+                viewModel.saveEvent(onEventSaved)
             },
             enabled = uiState.isValid(),
             modifier = Modifier.fillMaxWidth(),
@@ -227,7 +236,8 @@ fun StyledTextField(
     onValueChange: (String) -> Unit,
     label: String,
     readOnly: Boolean = false,
-    modifier: Modifier // ✅ Recibe el Modifier
+    modifier: Modifier,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
